@@ -1,0 +1,119 @@
+/* dtsi for cerro board (PQ83A01)*/
+#include <dt-bindings/gpio/gpio.h>
+
+&pm8550b_eusb2_repeater {
+	qcom,param-override-seq =
+		/* <value reg_offset> */
+		/* Adjust HS trasmit amplitude */
+		<0xc 0x51
+		/* Squelch detection threshold */
+		 0x3 0x54
+		/* Tx pre-emphasis tuning */
+		 0x7 0x57>;
+	qcom,host-param-override-seq =
+		/* <value reg_offset> */
+		/* Adjust HS trasmit amplitude */
+		<0x8 0x51
+		/* Squelch detection threshold */
+		 0x3 0x54
+		/* Tx pre-emphasis tuning */
+		 0x7 0x57>;
+};
+
+&soc {
+	gpio_keys_nubia {
+		game_sw_on {
+			gpios = <&tlmm 174 0>;
+		};
+
+		game_sw_off {
+			gpios = <&tlmm 182 0>;
+		};
+	};
+
+    hall_sensor {
+		compatible = "ah,hall_ic";
+		vddio-supply = <&L1B>;
+		linux,min-uv = <1800000>;
+		linux,max-uv = <1800000>;
+		ah,gpio_irq = <&tlmm 65 0x00>;
+		linux,name = "hall_sensor";
+	};
+};
+
+&qupv3_se4_spi {
+	goodix-berlin-d@0 {
+		goodix,avdd-gpio = <&tlmm 28 0x0>;
+		goodix,iovdd-name = "vdd";
+		vdd-supply = <&L12B>;
+		panel = <&dsi_bf068_rm692h0_6p8_plus_dsc_cmd>;
+	};
+};
+
+&spf_core_platform  {
+	pineapple_snd: sound {
+		qcom,audio-routing =
+			"AMIC1", "Analog Mic1",
+			"AMIC1", "MIC BIAS1",
+			"AMIC2", "Analog Mic2",
+			"AMIC2", "MIC BIAS2",
+			"AMIC3", "Analog Mic3",
+			"AMIC3", "MIC BIAS3",
+			"AMIC4", "Analog Mic4",
+			"AMIC4", "MIC BIAS3",
+			"AMIC5", "Analog Mic5",
+			"AMIC5", "MIC BIAS4",
+			"VA AMIC1", "Analog Mic1",
+			"VA AMIC1", "VA MIC BIAS1",
+			"VA AMIC2", "Analog Mic2",
+			"VA AMIC2", "VA MIC BIAS2",
+			"VA AMIC3", "Analog Mic3",
+			"VA AMIC3", "VA MIC BIAS3",
+			"VA AMIC4", "Analog Mic4",
+			"VA AMIC4", "VA MIC BIAS3",
+			"VA AMIC5", "Analog Mic5",
+			"VA AMIC5", "VA MIC BIAS4",
+			"TX DMIC0", "Digital Mic0",
+			"TX DMIC0", "MIC BIAS3",
+			"TX DMIC1", "Digital Mic1",
+			"TX DMIC1", "MIC BIAS3",
+			"TX DMIC2", "Digital Mic2",
+			"TX DMIC2", "MIC BIAS1",
+			"TX DMIC3", "Digital Mic3",
+			"TX DMIC3", "MIC BIAS1",
+			"IN1_HPHL", "HPHL_OUT",
+			"IN2_HPHR", "HPHR_OUT",
+			"IN3_EAR", "AUX_OUT",
+			"RX_TX DEC0_INP", "TX DEC0 MUX",
+			"RX_TX DEC1_INP", "TX DEC1 MUX",
+			"RX_TX DEC2_INP", "TX DEC2 MUX",
+			"RX_TX DEC3_INP", "TX DEC3 MUX",
+			"TX SWR_INPUT", "WCD_TX_OUTPUT",
+			"VA SWR_INPUT", "VA_SWR_CLK",
+			"VA SWR_INPUT", "WCD_TX_OUTPUT",
+			"VA_AIF1 CAP", "VA_SWR_CLK",
+			"VA_AIF2 CAP", "VA_SWR_CLK",
+			"VA_AIF3 CAP", "VA_SWR_CLK",
+			"VA DMIC0", "Digital Mic0",
+			"VA DMIC1", "Digital Mic1",
+			"VA DMIC2", "Digital Mic2",
+			"VA DMIC3", "Digital Mic3",
+			"VA DMIC0", "VA MIC BIAS3",
+			"VA DMIC1", "VA MIC BIAS3",
+			"VA DMIC2", "VA MIC BIAS1",
+			"VA DMIC3", "VA MIC BIAS1";
+		qcom,msm-mbhc-usbc-audio-supported = <1>;
+		qcom,msm-mbhc-hphl-swh = <0>;
+		qcom,msm-mbhc-gnd-swh = <0>;
+        };
+};
+
+&qupv3_hub_i2c4 {
+	haptic_hv@5A {
+		reset-gpio = <&tlmm 120 0>;
+	};
+};
+
+&battery_charger {
+	qcom,shutdown-voltage = <2800>;
+};
